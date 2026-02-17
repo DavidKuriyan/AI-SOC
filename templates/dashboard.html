@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}SOC Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-grid">
+    <!-- KPIS -->
+    <div class="kpi-card">
+        <div class="kpi-icon"><i class="fa-solid fa-bell"></i></div>
+        <div class="kpi-value" id="total-alerts">{{ total_alerts }}</div>
+        <div class="kpi-label">Total Alerts</div>
+    </div>
+    <div class="kpi-card critical">
+        <div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="kpi-value" id="critical-alerts">{{ critical_alerts }}</div>
+        <div class="kpi-label">Critical Threats</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-icon"><i class="fa-solid fa-network-wired"></i></div>
+        <div class="kpi-value">Active</div>
+        <div class="kpi-label">System Status</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-icon"><i class="fa-solid fa-shield-virus"></i></div>
+        <div class="kpi-value">Enabled</div>
+        <div class="kpi-label">AI Protection</div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="chart-container span-2">
+        <div class="card-header">
+            <h3><i class="fa-solid fa-chart-area"></i> Live Attack Traffic</h3>
+        </div>
+        <canvas id="trafficChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <div class="card-header">
+            <h3><i class="fa-solid fa-chart-pie"></i> Attack Distribution</h3>
+        </div>
+        <canvas id="attackTypeChart"></canvas>
+    </div>
+
+    <!-- Recent Alerts Table -->
+    <div class="table-container span-3">
+        <div class="card-header">
+            <h3><i class="fa-solid fa-list-ul"></i> Recent Alerts (Live Stream)</h3>
+            <a href="{{ url_for('alerts_page') }}" class="btn-sm">View All</a>
+        </div>
+        <table class="soc-table" id="dashboard-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>IP Address</th>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Risk Score</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alert in recent_alerts %}
+                <tr
+                    class="alert-row risk-{{ 'high' if alert.risk_score > 80 else 'medium' if alert.risk_score > 50 else 'low' }}">
+                    <td>{{ alert.timestamp }}</td>
+                    <td class="mono">{{ alert.ip_address }}</td>
+                    <td>{{ alert.country or 'Unknown' }}</td>
+                    <td><span class="badge">{{ alert.attack_type }}</span></td>
+                    <td>
+                        <div class="risk-meter">
+                            <div class="bar" style="width: {{ alert.risk_score }}%;"></div>
+                            <span class="val">{{ alert.risk_score }}</span>
+                        </div>
+                    </td>
+                    <td><a href="{{ url_for('incident_details', alert_id=alert.id) }}" class="btn-xs">Inspect</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

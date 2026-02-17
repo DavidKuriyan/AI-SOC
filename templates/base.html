@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-SOC | Security Operations Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved"></i> <span>AI-SOC</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.path == '/dashboard' else '' }}"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('alerts_page') }}" class="{{ 'active' if request.path == '/alerts' else '' }}"><i class="fa-solid fa-bell"></i> Alerts</a></li>
+                <li><a href="{{ url_for('map_view') }}" class="{{ 'active' if request.path == '/map' else '' }}"><i class="fa-solid fa-globe"></i> Geo Map</a></li>
+                <li><a href="{{ url_for('analytics') }}" class="{{ 'active' if request.path == '/analytics' else '' }}"><i class="fa-solid fa-chart-pie"></i> Analytics</a></li>
+                <li><a href="{{ url_for('settings') }}" class="{{ 'active' if request.path == '/settings' else '' }}"><i class="fa-solid fa-cog"></i> Settings</a></li>
+            </ul>
+            <div class="user-profile">
+                <div class="avatar">A</div>
+                <div class="info">
+                    <span class="name">Admin</span>
+                    <span class="role">SOC Analyst</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 class="page-title">{% block title %}Dashboard{% endblock %}</h2>
+                <div class="status-indicator">
+                    <span class="dot pulse"></span> System Online
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

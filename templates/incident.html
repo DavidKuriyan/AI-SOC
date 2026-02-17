@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Incident #{{ alert.id }}{% endblock %}
+
+{% block content %}
+<div class="incident-layout">
+    <div class="span-2 incident-header">
+        <h1>Incident Report #{{ alert.id }}</h1>
+        <div class="meta">
+            <span><i class="fa-regular fa-clock"></i> {{ alert.timestamp }}</span>
+            <span><i class="fa-solid fa-globe"></i> {{ alert.country }}</span>
+            <span class="risk-tag {{ 'critical' if alert.risk_score > 80 else 'medium' }}">Risk: {{ alert.risk_score
+                }}</span>
+        </div>
+    </div>
+
+    <!-- Summary Panel -->
+    <div class="panel summary-panel">
+        <h3><i class="fa-solid fa-file-waveform"></i> AI Analysis Summary</h3>
+        <p class="summary-text">{{ alert.summary }}</p>
+    </div>
+
+    <!-- Details Panel -->
+    <div class="panel details-panel">
+        <h3><i class="fa-solid fa-circle-info"></i> Technical Details</h3>
+        <table class="details-table">
+            <tr>
+                <td>Source IP:</td>
+                <td class="mono">{{ alert.ip_address }}</td>
+            </tr>
+            <tr>
+                <td>ISP:</td>
+                <td>{{ alert.isp or 'Unknown' }}</td>
+            </tr>
+            <tr>
+                <td>Attack Type:</td>
+                <td>{{ alert.attack_type }}</td>
+            </tr>
+            <tr>
+                <td>Status:</td>
+                <td>{{ alert.status }}</td>
+            </tr>
+        </table>
+        <div class="actions">
+            <button class="btn-action red"><i class="fa-solid fa-ban"></i> Block IP</button>
+            <button class="btn-action"><i class="fa-solid fa-check"></i> Mark Resolved</button>
+        </div>
+    </div>
+
+    <!-- SHAP Panel -->
+    <div class="panel shap-panel span-2">
+        <h3><i class="fa-solid fa-brain"></i> Explainable AI (SHAP)</h3>
+        <div class="shap-placeholder">
+            <!-- In a real scenario, we would generate a specific image for this ID -->
+            <!-- <img src="{{ url_for('static', filename='shap_plots/shap_' ~ alert.id ~ '.png') }}" alt="SHAP Explanation"> -->
+            <div class="mock-shap">
+                <p>Top Contributing Features to Risk Score:</p>
+                <div class="shap-bar">
+                    <span>Attack Frequency</span>
+                    <div class="bar-fill" style="width: 85%"></div>
+                </div>
+                <div class="shap-bar">
+                    <span>Failed Logins</span>
+                    <div class="bar-fill" style="width: 60%"></div>
+                </div>
+                <div class="shap-bar">
+                    <span>Port Scan Pattern</span>
+                    <div class="bar-fill" style="width: 45%"></div>
+                </div>
+                <p class="note">SHAP values indicate {{ alert.attack_type }} characteristics strongly match known
+                    signatures.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .incident-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .panel {
+        background: var(--bg-panel);
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+    }
+
+    .summary-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #fff;
+    }
+
+    .risk-tag {
+        padding: 0.2rem 0.8rem;
+        border-radius: 4px;
+        font-weight: bold;
+        background: #333;
+    }
+
+    .risk-tag.critical {
+        background: var(--accent-red);
+        color: #fff;
+    }
+
+    .details-table td {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #222;
+    }
+
+    .btn-action {
+        margin-top: 1rem;
+        padding: 0.8rem;
+        width: 100%;
+        background: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 6px;
+    }
+
+    .btn-action.red {
+        background: var(--accent-red);
+    }
+
+    .shap-bar {
+        margin: 1rem 0;
+    }
+
+    .shap-bar span {
+        display: block;
+        margin-bottom: 0.3rem;
+        font-size: 0.9rem;
+        color: #888;
+    }
+
+    .bar-fill {
+        height: 8px;
+        background: var(--accent-blue);
+        border-radius: 4px;
+    }
+</style>
+{% endblock %}

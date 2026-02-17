@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Security Analytics{% endblock %}
+
+{% block content %}
+<div class="dashboard-grid">
+    <div class="chart-container span-2">
+        <h3>Attack Trends (24h)</h3>
+        <canvas id="analyticsChart1"></canvas>
+    </div>
+    <div class="chart-container span-2">
+        <h3>Top Attacking IPs</h3>
+        <canvas id="analyticsChart2"></canvas>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx1 = document.getElementById('analyticsChart1').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                datasets: [{
+                    label: 'Attacks',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: '#00FF9F'
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true, grid: { color: '#333' } }, x: { grid: { display: false } } }
+            }
+        });
+
+        const ctx2 = document.getElementById('analyticsChart2').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['192.168.1.10', '103.45.2.1', '88.12.44.11'],
+                datasets: [{
+                    data: [30, 50, 20],
+                    backgroundColor: ['#FF3B3B', '#FFD700', '#00BFFF'],
+                    borderColor: '#121212'
+                }]
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,11 @@
+flask
+flask-sqlalchemy
+pandas
+numpy
+scikit-learn
+shap
+ipapi
+requests
+matplotlib
+gunicorn
+python-dotenv

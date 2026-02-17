@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Security Alerts{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="card-header">
+        <h3><i class="fa-solid fa-list"></i> All Security Alerts</h3>
+        <div class="filters">
+            <select class="form-select">
+                <option>All Risks</option>
+                <option>Critical</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+            </select>
+        </div>
+    </div>
+
+    <table class="soc-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Timestamp</th>
+                <th>Source IP</th>
+                <th>Location</th>
+                <th>Attack Type</th>
+                <th>Risk Score</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alert in alerts %}
+            <tr class="alert-row">
+                <td>#{{ alert.id }}</td>
+                <td>{{ alert.timestamp }}</td>
+                <td class="mono">{{ alert.ip_address }}</td>
+                <td>{{ alert.country or 'Unknown' }}</td>
+                <td><span class="badge">{{ alert.attack_type }}</span></td>
+                <td>
+                    <div class="risk-meter">
+                        <div class="bar"
+                            style="width: {{ alert.risk_score }}%; background: {{ '#FF3B3B' if alert.risk_score > 80 else '#FFD700' if alert.risk_score > 50 else '#00FF9F' }}">
+                        </div>
+                        <span class="val">{{ alert.risk_score }}</span>
+                    </div>
+                </td>
+                <td><span class="status-badge {{ alert.status|lower }}">{{ alert.status }}</span></td>
+                <td><a href="{{ url_for('incident_details', alert_id=alert.id) }}" class="btn-xs">Investigate</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
